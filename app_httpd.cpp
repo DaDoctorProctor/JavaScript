@@ -241,59 +241,26 @@ static esp_err_t cmd_handler(httpd_req_t *req)
   else if (!strcmp(variable, "sm3"))
   {ledcWrite(5, val);}
   else if (!strcmp(variable, "sm4"))
-  {ledcWrite(6, val);}
-  
+  {ledcWrite(6, val);} 
   else if (!strcmp(variable, "car")) {
     if (val == 1) {
       Serial.println("Forward");
-      /* Controlling the motor with PWM */
-      /* ledcWrite(Channel, Dutycycle) */
-//      ledcWrite(3, 0);
-//      ledcWrite(4, speed);
-//      ledcWrite(5, speed);
-//      ledcWrite(6, 0);
-      
       ledcWrite(8, 60);
     }
     else if (val == 2) {
       Serial.println("Turn Left");
-      /* Controlling the motor with PWM */
-      /* ledcWrite(Channel, Dutycycle) */
-//      ledcWrite(3, speed);
-//      ledcWrite(4, 0);
-//      ledcWrite(5, speed);
-//      ledcWrite(6, 0);
-      
       ledcWrite(8, 120);
-
     }
     else if (val == 3) {
       Serial.println("Stop");
-      /* Controlling the motor with PWM */
-      /* ledcWrite(Channel, Dutycycle) */
       ledcWrite(8, 0);
     }
     else if (val == 4) {
       Serial.println("Turn Right");
-      /* Controlling the motor with PWM */
-      /* ledcWrite(Channel, Dutycycle) */
-//      ledcWrite(3, 0);
-//      ledcWrite(4, speed);
-//      ledcWrite(5, 0);
-//      ledcWrite(6, speed);
-
       ledcWrite(8, 200);
-
     }
     else if (val == 5) {
       Serial.println("Backward");
-      /* Controlling the motor with PWM */
-      /* ledcWrite(Channel, Dutycycle) */
-//      ledcWrite(3, speed);
-//      ledcWrite(4, 0);
-//      ledcWrite(5, 0);
-//      ledcWrite(6, speed);
-
       ledcWrite(8, 255);
     }
   }
@@ -593,12 +560,8 @@ static const char PROGMEM INDEX_HTML[] = R"rawliteral(
       <button class="tablinks" onclick="tabAdder(event, 'Control');myDIV.style.display='none'" id="defaultOpen">Controles</button>
       <button class="tablinks" onclick="tabAdder(event, 'Servomotors');myDIV.style.display='none'">Servomotores</button>
       <button class="tablinks" onclick="tabAdder(event, 'About');myDIV.style.display='none'">Acerca de</button>
-      
       <span onclick="myDIV.style.display='block'"; class="closetab" id="defaultOpen">&times</span>
-      
       <button class="tablinks" onclick="tabAdder(event, 'Debug')" id="myDIV">Debug</button>
-      
-      
       
     </div>
 
@@ -630,7 +593,7 @@ static const char PROGMEM INDEX_HTML[] = R"rawliteral(
       <div class="sliderAlign">  
         <label class="label">Flash</label>
         <input type="range" class="slider" id="flash" min="0" max="255" value="0" 
-        onchange="try{fetch(document.location.origin+'/control?var=flash&val='+this.value);}catch(e){}"
+        oninput="try{fetch(document.location.origin+'/control?var=flash&val='+this.value);}catch(e){}"
         oninput="Conversion(flash.value,0)">
         <label class="label" id="convFlash">0</label>
       </div>
@@ -639,7 +602,7 @@ static const char PROGMEM INDEX_HTML[] = R"rawliteral(
       <div class="sliderAlign"> 
         <label class="label">SmA</label>
         <input type="range" class="slider" id="sm1" min="0" max="255" value="0" 
-        onchange="try{fetch(document.location.origin+'/control?var=sm1&val='+this.value);}catch(e){}" 
+        oninput="try{fetch(document.location.origin+'/control?var=sm1&val='+this.value);}catch(e){}" 
         oninput="Conversion(sm1.value,1)">
         <label class="label" id="convSM1">0</label>
       </div>
@@ -648,7 +611,7 @@ static const char PROGMEM INDEX_HTML[] = R"rawliteral(
       <div class="sliderAlign"> 
         <label class="label">SmB</label>
         <input type="range" class="slider" id="sm2" min="0" max="255" value="0" 
-        onchange="try{fetch(document.location.origin+'/control?var=sm2&val='+this.value);}catch(e){}" 
+        oninput="try{fetch(document.location.origin+'/control?var=sm2&val='+this.value);}catch(e){}" 
         oninput="Conversion(sm2.value,2)">
         <label class="label" id="convSM2">0</label>
       </div>
@@ -657,7 +620,7 @@ static const char PROGMEM INDEX_HTML[] = R"rawliteral(
       <div class="sliderAlign"> 
         <label class="label">SmC </label>
         <input type="range" class="slider" id="sm3" min="0" max="255" value="230" 
-        onchange="try{fetch(document.location.origin+'/control?var=sm3&val='+this.value);}catch(e){}" 
+        oninput="try{fetch(document.location.origin+'/control?var=sm3&val='+this.value);}catch(e){}" 
         oninput="Conversion(sm3.value,3)">
         <label class="label" id="convSM3">90</label>
       </div>
@@ -666,7 +629,7 @@ static const char PROGMEM INDEX_HTML[] = R"rawliteral(
       <div class="sliderAlign"> 
         <label class="label">SmD</label>
         <input type="range" class="slider" id="sm4" min="0" max="255" value="127.5" 
-        onchange="try{fetch(document.location.origin+'/control?var=sm4&val='+this.value);}catch(e){}" 
+        oninput="try{fetch(document.location.origin+'/control?var=sm4&val='+this.value);}catch(e){}" 
         oninput="Conversion(sm4.value,4)">
         <label class="label" id="convSM4">50</label>
       </div>
