@@ -3,8 +3,6 @@
 #include <WiFi.h>
 
 /* Wifi Crdentials */
-//const char* ssid = "TP-LINK_8542";
-//const char* password = "28705086";
 const char* ssid = "ESP32-Soft-accessPoint";
 const char* password = "12345678";
 
@@ -36,6 +34,8 @@ const int LMotor1 = 13;
 const int LMotor2 = 12;
 const int ServoPin = 2;
 const int FlashPin = 4;
+
+int val_final;
 
 void initMotors()
 {
@@ -131,13 +131,12 @@ void setup() {
 //  Serial.println("WiFi connected");
 
   WiFi.softAP(ssid, password);
-  
-  
-  
+
   startCameraServer();/* Starting camera server */
 
-  Serial.print("Camera Ready! Use 'http://");
-  Serial.print(WiFi.localIP());
+  Serial.print("Hotspot mode. Camera Ready! Use 'http://");
+  Serial.println("192.168.4.1");
+  //Serial.print(WiFi.localIP());
   //WiFiAddr = WiFi.localIP().toString();
   Serial.println("' to connect");
 
@@ -152,5 +151,7 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  
+  //Cambiar el tiempo de envio de datos al gusto. 
+  Serial.println(val_final);
+  delay(500);
 }
