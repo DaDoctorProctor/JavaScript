@@ -1,7 +1,6 @@
 #include "dl_lib_matrix3d.h"
 #include <esp32-hal-ledc.h>
 int speed = 255;
-int Global = 60;
 #include "esp_http_server.h"
 #include "esp_timer.h"
 #include "esp_camera.h"
@@ -9,6 +8,10 @@ int Global = 60;
 #include "Arduino.h"
 //Extra
 #include "camera_index.h"
+//extern int val_final;
+extern int val_final;
+
+
 
 typedef struct {
   httpd_req_t *req;
@@ -216,7 +219,6 @@ static esp_err_t cmd_handler(httpd_req_t *req)
   sensor_t * s = esp_camera_sensor_get();
   int res = 0;
 
- 
   if (!strcmp(variable, "framesize"))
   {
     Serial.println("framesize");
@@ -234,41 +236,55 @@ static esp_err_t cmd_handler(httpd_req_t *req)
   //Don't use channel 1 and channel 2
   else if (!strcmp(variable, "flash"))
   {ledcWrite(7, val);}
-  else if (!strcmp(variable, "sm1"))
-  {ledcWrite(3,val);}
-  else if (!strcmp(variable, "sm2"))
-  {ledcWrite(4, val);}
-  else if (!strcmp(variable, "sm3"))
-  {ledcWrite(5, val);}
-  else if (!strcmp(variable, "sm4"))
-  {ledcWrite(6, val);} 
+  else if (!strcmp(variable, "sm1")){
+    //ledcWrite(3,val);
+    val_final = 1000 + val;
+  }
+  else if (!strcmp(variable, "sm2")){
+    //ledcWrite(4, val);
+    val_final = 2000 + val;
+  }
+  else if (!strcmp(variable, "sm3")){
+    //ledcWrite(5, val);
+    //int val_03 = 3000 + val;
+    val_final = 3000 + val;
+  }
+  else if (!strcmp(variable, "sm4")){
+    //ledcWrite(6, val);
+    //int val_04 = 4000 + val;
+    val_final = 4000 + val;
+  } 
   else if (!strcmp(variable, "car")) {
     if (val == 1) {
-      Serial.println("Forward");
+      //Serial.println("Forward");
       ledcWrite(8, 60);
+      Serial.println("arriba");
     }
     else if (val == 2) {
-      Serial.println("Turn Left");
+      //Serial.println("Turn Left");
       ledcWrite(8, 120);
+      Serial.println("izquierdo");
     }
     else if (val == 3) {
-      Serial.println("Stop");
+      //Serial.println("Stop");
       ledcWrite(8, 0);
+      Serial.println("stop");
     }
     else if (val == 4) {
-      Serial.println("Turn Right");
+      //Serial.println("Turn Right");
       ledcWrite(8, 200);
+      Serial.println("derecho");
     }
     else if (val == 5) {
-      Serial.println("Backward");
+      //Serial.println("Backward");
       ledcWrite(8, 255);
+      Serial.println("abajo");
     }
   }
   else
   {
     Serial.println("variable");
     res = -1;
-    
   }
 
   if (res) {
@@ -278,6 +294,7 @@ static esp_err_t cmd_handler(httpd_req_t *req)
   httpd_resp_set_hdr(req, "Access-Control-Allow-Origin", "*");
   return httpd_resp_send(req, NULL, 0);
 }
+
 
 static esp_err_t status_handler(httpd_req_t *req) {
   static char json_response[1024];
@@ -602,8 +619,8 @@ static const char PROGMEM INDEX_HTML[] = R"rawliteral(
       <div class="sliderAlign"> 
         <label class="label">SmA</label>
         <input type="range" class="slider" id="sm1" min="0" max="255" value="0" 
-        oninput="try{fetch(document.location.origin+'/control?var=sm1&val='+this.value);}catch(e){}" 
-        oninput="Conversion(sm1.value,1)">
+        oninput="try{fetch(document.location.origin+'/control?var=sm1&val='+this.value);}catch(e){};
+        Conversion(sm1.value,1)">
         <label class="label" id="convSM1">0</label>
       </div>
       <br/>
@@ -611,8 +628,8 @@ static const char PROGMEM INDEX_HTML[] = R"rawliteral(
       <div class="sliderAlign"> 
         <label class="label">SmB</label>
         <input type="range" class="slider" id="sm2" min="0" max="255" value="0" 
-        oninput="try{fetch(document.location.origin+'/control?var=sm2&val='+this.value);}catch(e){}" 
-        oninput="Conversion(sm2.value,2)">
+        oninput="try{fetch(document.location.origin+'/control?var=sm2&val='+this.value);}catch(e){}; 
+        Conversion(sm2.value,2)">
         <label class="label" id="convSM2">0</label>
       </div>
       <br/>
@@ -620,8 +637,8 @@ static const char PROGMEM INDEX_HTML[] = R"rawliteral(
       <div class="sliderAlign"> 
         <label class="label">SmC </label>
         <input type="range" class="slider" id="sm3" min="0" max="255" value="230" 
-        oninput="try{fetch(document.location.origin+'/control?var=sm3&val='+this.value);}catch(e){}" 
-        oninput="Conversion(sm3.value,3)">
+        oninput="try{fetch(document.location.origin+'/control?var=sm3&val='+this.value);}catch(e){};
+        Conversion(sm3.value,3)">
         <label class="label" id="convSM3">90</label>
       </div>
       <br/>
@@ -629,8 +646,8 @@ static const char PROGMEM INDEX_HTML[] = R"rawliteral(
       <div class="sliderAlign"> 
         <label class="label">SmD</label>
         <input type="range" class="slider" id="sm4" min="0" max="255" value="127.5" 
-        oninput="try{fetch(document.location.origin+'/control?var=sm4&val='+this.value);}catch(e){}" 
-        oninput="Conversion(sm4.value,4)">
+        oninput="try{fetch(document.location.origin+'/control?var=sm4&val='+this.value);}catch(e){}; 
+        Conversion(sm4.value,4)">
         <label class="label" id="convSM4">50</label>
       </div>
       
